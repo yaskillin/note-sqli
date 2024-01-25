@@ -1,16 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import Layout from '../components/Layout.vue'
 import NoteList from '../components/NoteList.vue'
+import NoteEditor from '../components/NoteEditor.vue'
+import Note from '../components/Note.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: NoteList // todo: make this in a home page that has a menu to navigate between sections
+      component: Layout,
+      children: [
+        { path: '', component: NoteList },
+        { path: 'note-editor', component: NoteEditor },
+        { path: 'note/:id', component: Note, props: true }
+      ]
     }
-    // todo: editor for saving new note
-    // todo: editor to show or edit a note
   ]
 })
 

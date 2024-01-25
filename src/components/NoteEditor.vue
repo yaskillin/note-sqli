@@ -1,11 +1,39 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
+import axios from 'axios';
+
 const note = ref({
   title: '',
   content: ''
-})
-function submit() {
-  // todo logic
+});
+
+async function submitNote() {
+  try {
+    // Vérifiez si le formulaire est valide
+    if (!note.value.title.trim() || !note.value.content.trim()) {
+      alert('Please enter both title and content.');
+      return;
+    }
+
+    // Envoyez la note au backend (ajustez l'URL et les noms de champs selon votre API)
+    const response = await axios.post('http://localhost:3000/notes', {
+      title: note.value.title,
+      content: note.value.content
+    });
+
+    // Si la création réussit, vous pouvez faire quelque chose avec la réponse
+    console.log('Note created successfully:', response.data);
+
+    // Réinitialisez le formulaire après une soumission réussie
+    note.value.title = '';
+    note.value.content = '';
+  } catch (error) {
+    // Gérez les erreurs selon vos besoins
+    console.error('Error creating note:', error);
+
+    // Affichez un message à l'utilisateur en cas d'erreur
+    alert('An error occurred while creating the note. Please try again.');
+  }
 }
 </script>
 
@@ -32,7 +60,7 @@ function submit() {
         />
       </div>
       <button class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">
-        save
+        Save
       </button>
     </form>
   </div>
